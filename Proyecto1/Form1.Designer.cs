@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.btn1 = new System.Windows.Forms.Button();
             this.btn2 = new System.Windows.Forms.Button();
             this.btn3 = new System.Windows.Forms.Button();
@@ -45,6 +46,8 @@
             this.btnResta = new System.Windows.Forms.Button();
             this.btnMul = new System.Windows.Forms.Button();
             this.btnDiv = new System.Windows.Forms.Button();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // btn1
@@ -145,6 +148,7 @@
             this.btnE.TabIndex = 13;
             this.btnE.Text = "=";
             this.btnE.UseVisualStyleBackColor = true;
+            this.btnE.Click += new System.EventHandler(this.btnE_Click);
             // 
             // btnP
             // 
@@ -169,10 +173,10 @@
             // textBox1
             // 
             this.textBox1.Font = new System.Drawing.Font("Lucida Sans Unicode", 28.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox1.Location = new System.Drawing.Point(71, 25);
+            this.textBox1.Location = new System.Drawing.Point(110, 28);
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(407, 88);
+            this.textBox1.Size = new System.Drawing.Size(425, 100);
             this.textBox1.TabIndex = 14;
             this.textBox1.Click += new System.EventHandler(this.btn0_Click);
             this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
@@ -206,7 +210,7 @@
             this.btnMul.Name = "btnMul";
             this.btnMul.Size = new System.Drawing.Size(63, 55);
             this.btnMul.TabIndex = 17;
-            this.btnMul.Text = "X";
+            this.btnMul.Text = "*";
             this.btnMul.UseVisualStyleBackColor = true;
             this.btnMul.Click += new System.EventHandler(this.btn0_Click);
             // 
@@ -221,11 +225,23 @@
             this.btnDiv.UseVisualStyleBackColor = true;
             this.btnDiv.Click += new System.EventHandler(this.btn0_Click);
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox1.Image")));
+            this.pictureBox1.Location = new System.Drawing.Point(4, 28);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(100, 100);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 19;
+            this.pictureBox1.TabStop = false;
+            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(547, 510);
+            this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.btnDiv);
             this.Controls.Add(this.btnMul);
             this.Controls.Add(this.btnResta);
@@ -246,6 +262,7 @@
             this.Name = "Form1";
             this.Text = "Calculadora";
             this.Load += new System.EventHandler(this.Form1_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -269,6 +286,7 @@
         private System.Windows.Forms.Button btnResta;
         private System.Windows.Forms.Button btnMul;
         private System.Windows.Forms.Button btnDiv;
+        private System.Windows.Forms.PictureBox pictureBox1;
     }
 }
 
