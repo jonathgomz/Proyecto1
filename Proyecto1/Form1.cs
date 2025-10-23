@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using NCalc;
 namespace Proyecto1
 {
     public partial class Form1 : Form
@@ -28,11 +29,30 @@ namespace Proyecto1
         }
         private void btnE_Click(object sender, EventArgs e)
         {
-            string operacion = textBox1.Text;
+          // string operacion = textBox1.Text;
             try
             {
-                var resultado = new System.Data.DataTable().Compute(operacion, " ");
-                textBox1.Text = resultado.ToString();
+                string operacion = textBox1.Text;
+
+                //para calcular raizes
+                operacion = operacion.Replace("√", "sqrt");
+
+                //para calcular potencias
+                operacion = operacion.Replace("x²", ",");
+
+                //para calcular con porcenjate
+                operacion = operacion.Replace("%", "/100");
+
+            
+
+
+                Expression o = new Expression(textBox1.Text);
+                var resultado = o.Evaluate();
+
+                
+               textBox1.Text = resultado.ToString();
+
+
             }
             catch
             {
@@ -41,22 +61,26 @@ namespace Proyecto1
         }
         private void pictureBox1_Click(object sender, EventArgs e)
         {
-            textBox1.Clear();
+
         }
         private void button1_Click(object sender, EventArgs e)
         {
         }
         private void btnClearEntry_Click(object sender, EventArgs e)
         {
+            textBox1.Clear();
+
         }
         private void btnPi_Click(object sender, EventArgs e)
         {
         }
         private void btnElevado_Click(object sender, EventArgs e)
         {
+
         }
         private void btnRaiz_Click(object sender, EventArgs e)
         {
+
         }
         private void btnPercent_Click(object sender, EventArgs e)
         {
