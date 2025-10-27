@@ -13,7 +13,8 @@ namespace Calculadora2
 {
     public partial class Calculadora : Form
     {
-        string connectionString = @"Server=.\sqlexpress;Database=CalculadoraDB;TrustServerCertificate=true;Integrated Security=SSPI;";
+        //string connectionString = @"Server=.\sqlexpress;Database=CalculadoraDB;TrustServerCertificate=true;Integrated Security=SSPI;"; //espress
+        string connectionString = @"Server=localhost;Database=CalculadoraDB;TrustServerCertificate=true;Integrated Security=SSPI;";
         double primer = 0;
         double segundo = 0;
         string operador = "";
