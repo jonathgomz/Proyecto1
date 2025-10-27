@@ -46,8 +46,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Clases\CCuadrado.cs" />
     <Compile Include="Clases\Cdividir.cs" />
     <Compile Include="Clases\Cmultiplicar.cs" />
+    <Compile Include="Clases\CPorcentaje.cs" />
     <Compile Include="Clases\CRaiz.cs" />
     <Compile Include="Clases\Cresta.cs" />
     <Compile Include="Clases\Csuma.cs" />

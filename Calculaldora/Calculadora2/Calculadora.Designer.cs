@@ -53,7 +53,11 @@
             this.btn3 = new System.Windows.Forms.Button();
             this.btn2 = new System.Windows.Forms.Button();
             this.btn1 = new System.Windows.Forms.Button();
+            this.textBoxH = new System.Windows.Forms.TextBox();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.listBox1 = new System.Windows.Forms.ListBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
             // 
             // btnPi
@@ -86,6 +90,7 @@
             this.btnElevado.TabIndex = 47;
             this.btnElevado.Text = "x²";
             this.btnElevado.UseVisualStyleBackColor = true;
+            this.btnElevado.Click += new System.EventHandler(this.btnElevado_Click);
             // 
             // btnPercent
             // 
@@ -96,6 +101,7 @@
             this.btnPercent.TabIndex = 46;
             this.btnPercent.Text = "%";
             this.btnPercent.UseVisualStyleBackColor = true;
+            this.btnPercent.Click += new System.EventHandler(this.btnPercent_Click);
             // 
             // btnClearEntry
             // 
@@ -203,6 +209,7 @@
             this.btnP.TabIndex = 36;
             this.btnP.Text = ".";
             this.btnP.UseVisualStyleBackColor = true;
+            this.btnP.Click += new System.EventHandler(this.btnNumero_Click);
             // 
             // btn0
             // 
@@ -212,7 +219,7 @@
             this.btn0.TabIndex = 35;
             this.btn0.Text = "0";
             this.btn0.UseVisualStyleBackColor = true;
-            this.btn0.Click += new System.EventHandler(this.btn0_Click);
+            this.btn0.Click += new System.EventHandler(this.btnNumero_Click);
             // 
             // btn9
             // 
@@ -222,7 +229,7 @@
             this.btn9.TabIndex = 34;
             this.btn9.Text = "9";
             this.btn9.UseVisualStyleBackColor = true;
-            this.btn9.Click += new System.EventHandler(this.btn9_Click);
+            this.btn9.Click += new System.EventHandler(this.btnNumero_Click);
             // 
             // btn8
             // 
@@ -232,7 +239,7 @@
             this.btn8.TabIndex = 33;
             this.btn8.Text = "8";
             this.btn8.UseVisualStyleBackColor = true;
-            this.btn8.Click += new System.EventHandler(this.btn8_Click);
+            this.btn8.Click += new System.EventHandler(this.btnNumero_Click);
             // 
             // btn7
             // 
@@ -242,7 +249,7 @@
             this.btn7.TabIndex = 32;
             this.btn7.Text = "7";
             this.btn7.UseVisualStyleBackColor = true;
-            this.btn7.Click += new System.EventHandler(this.btn7_Click);
+            this.btn7.Click += new System.EventHandler(this.btnNumero_Click);
             // 
             // btn6
             // 
@@ -252,7 +259,7 @@
             this.btn6.TabIndex = 31;
             this.btn6.Text = "6";
             this.btn6.UseVisualStyleBackColor = true;
-            this.btn6.Click += new System.EventHandler(this.btn6_Click);
+            this.btn6.Click += new System.EventHandler(this.btnNumero_Click);
             // 
             // btn5
             // 
@@ -262,7 +269,7 @@
             this.btn5.TabIndex = 30;
             this.btn5.Text = "5";
             this.btn5.UseVisualStyleBackColor = true;
-            this.btn5.Click += new System.EventHandler(this.btn5_Click);
+            this.btn5.Click += new System.EventHandler(this.btnNumero_Click);
             // 
             // btn4
             // 
@@ -272,7 +279,7 @@
             this.btn4.TabIndex = 29;
             this.btn4.Text = "4";
             this.btn4.UseVisualStyleBackColor = true;
-            this.btn4.Click += new System.EventHandler(this.btn4_Click);
+            this.btn4.Click += new System.EventHandler(this.btnNumero_Click);
             // 
             // btn3
             // 
@@ -282,7 +289,7 @@
             this.btn3.TabIndex = 28;
             this.btn3.Text = "3";
             this.btn3.UseVisualStyleBackColor = true;
-            this.btn3.Click += new System.EventHandler(this.btn3_Click);
+            this.btn3.Click += new System.EventHandler(this.btnNumero_Click);
             // 
             // btn2
             // 
@@ -292,7 +299,7 @@
             this.btn2.TabIndex = 27;
             this.btn2.Text = "2";
             this.btn2.UseVisualStyleBackColor = true;
-            this.btn2.Click += new System.EventHandler(this.btn2_Click);
+            this.btn2.Click += new System.EventHandler(this.btnNumero_Click);
             // 
             // btn1
             // 
@@ -302,13 +309,45 @@
             this.btn1.TabIndex = 26;
             this.btn1.Text = "1";
             this.btn1.UseVisualStyleBackColor = true;
-            this.btn1.Click += new System.EventHandler(this.btn1_Click);
+            this.btn1.Click += new System.EventHandler(this.btnNumero_Click);
+            // 
+            // textBoxH
+            // 
+            this.textBoxH.BackColor = System.Drawing.SystemColors.Control;
+            this.textBoxH.Location = new System.Drawing.Point(225, 21);
+            this.textBoxH.Name = "textBoxH";
+            this.textBoxH.Size = new System.Drawing.Size(79, 22);
+            this.textBoxH.TabIndex = 50;
+            this.textBoxH.TextChanged += new System.EventHandler(this.textBoxH_TextChanged);
+            // 
+            // pictureBox2
+            // 
+            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
+            this.pictureBox2.Location = new System.Drawing.Point(2, 3);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(48, 40);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox2.TabIndex = 51;
+            this.pictureBox2.TabStop = false;
+            this.pictureBox2.Click += new System.EventHandler(this.pictureBox2_Click);
+            // 
+            // listBox1
+            // 
+            this.listBox1.FormattingEnabled = true;
+            this.listBox1.ItemHeight = 16;
+            this.listBox1.Location = new System.Drawing.Point(335, 26);
+            this.listBox1.Name = "listBox1";
+            this.listBox1.Size = new System.Drawing.Size(311, 404);
+            this.listBox1.TabIndex = 52;
             // 
             // Calculadora
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(349, 462);
+            this.ClientSize = new System.Drawing.Size(660, 462);
+            this.Controls.Add(this.listBox1);
+            this.Controls.Add(this.pictureBox2);
+            this.Controls.Add(this.textBoxH);
             this.Controls.Add(this.btnPi);
             this.Controls.Add(this.btnRaiz);
             this.Controls.Add(this.btnElevado);
@@ -337,6 +376,7 @@
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Calculadora_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -368,6 +408,9 @@
         private System.Windows.Forms.Button btn3;
         private System.Windows.Forms.Button btn2;
         private System.Windows.Forms.Button btn1;
+        private System.Windows.Forms.TextBox textBoxH;
+        private System.Windows.Forms.PictureBox pictureBox2;
+        private System.Windows.Forms.ListBox listBox1;
     }
 }
 
