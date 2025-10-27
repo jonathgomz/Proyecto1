@@ -211,7 +211,8 @@ namespace Calculadora2
         //imagen que borra
         private void pictureBox1_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(textBox1.Text)) return;
+            if (string.IsNullOrEmpty(textBox1.Text)) 
+                return;
 
             if (textBox1.Text.Length == 1)
                 textBox1.Clear();
@@ -255,6 +256,8 @@ namespace Calculadora2
         private void btn9_Click(object sender, EventArgs e)
         {}
 
+        //---------------------------------------------------------------------------------
+        //SQL
         private void pictureBox2_Click(object sender, EventArgs e)
         {
             try
