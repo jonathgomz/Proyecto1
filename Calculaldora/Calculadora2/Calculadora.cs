@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,7 @@ namespace Calculadora2
 {
     public partial class Calculadora : Form
     {
+        string connectionString = @"Server=.\sqlexpress;Database=CalculadoraDB;TrustServerCertificate=true;Integrated Security=SSPI;";
         double primer = 0;
         double segundo = 0;
         string operador = "";
@@ -183,6 +185,7 @@ namespace Calculadora2
             segundo = 0;
             operador = "";
             esperandoSegundoNumero = true;
+            GuardarH(textBoxH.Text, resultado.ToString());
         }
 
         
@@ -233,7 +236,62 @@ namespace Calculadora2
 
         private void pictureBox2_Click(object sender, EventArgs e)
         {
+            try
+            {
+                using (SqlConnection conexion = new SqlConnection(connectionString))
+                {
+                    conexion.Open();
+                    string query = "SELECT Operacion, Resultado, FechaHora FROM HistorialCalculos ORDER BY Id DESC";
+                    SqlCommand cmd = new SqlCommand(query, conexion);
+                    SqlDataReader reader = cmd.ExecuteReader();
 
+                    StringBuilder historial = new StringBuilder();
+
+                    while (reader.Read())
+                    {
+                        string operacion = reader["Operacion"].ToString();
+                        string resultado = reader["Resultado"].ToString();
+                        DateTime fechahora = Convert.ToDateTime(reader["FechaHora"]);
+
+                        historial.AppendLine($"{operacion}  {resultado}         ({fechahora})");
+                    }
+
+                    if (historial.Length == 0)
+                    {
+                        MessageBox.Show("Historial vacío");
+                    }
+                    else
+                    {
+                        MessageBox.Show(historial.ToString(), "Historial de cálculos");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al mostrar historial: " + ex.Message);
+            }
         }
+
+        private void GuardarH(string operacion, string resultado)
+        {
+            try
+            {
+                using (SqlConnection conexion = new SqlConnection(connectionString))
+                {
+                    conexion.Open();
+                    string query = "INSERT INTO HistorialCalculos (Operacion, Resultado, FechaHora) VALUES (@Operacion, @Resultado, GETDATE())";
+                    SqlCommand cmd = new SqlCommand(query, conexion);
+                    cmd.Parameters.AddWithValue("@Operacion", operacion);
+                    cmd.Parameters.AddWithValue("@Resultado", resultado);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al guardar historial: " + ex.Message);
+            }
+        }
+
+
     }
 }
