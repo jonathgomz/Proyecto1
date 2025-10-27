@@ -45,6 +45,16 @@ namespace Calculadora2
             textBox1.Text += btn.Text;
         }
 
+        public void btnPi_Click(object sender, EventArgs e)
+        {
+            if (esperandoSegundoNumero)
+            {
+                textBox1.Clear();
+                esperandoSegundoNumero = false; 
+            }
+            textBox1.Text += Math.PI.ToString("0.####");
+        }
+
         private void btnSuma_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(textBox1.Text)) 
@@ -117,7 +127,7 @@ namespace Calculadora2
             primer = double.Parse(textBox1.Text);
             operador = "√";
             double resultado = objRa.Raiz(primer);
-            textBox1.Text = resultado.ToString();
+            textBox1.Text = resultado.ToString("0.####");
             textBoxH.Text = $"√{primer} =";
             esperandoSegundoNumero = false;
         }
@@ -192,7 +202,6 @@ namespace Calculadora2
         private void btnClearEntry_Click(object sender, EventArgs e) //Boton CE
         {
             textBox1.Clear(); //limpiar texto grande
-            textBoxH.Clear();//limpiar historial
             primer = 0;
             segundo = 0;
             operador = "";
@@ -208,6 +217,18 @@ namespace Calculadora2
                 textBox1.Clear();
             else
                 textBox1.Text = textBox1.Text.Substring(0, textBox1.Text.Length - 1);
+        }
+
+
+        //hace lo mismo que la imagen pero con el boton C
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            textBox1.Clear(); 
+            textBoxH.Clear();//limpiar historial
+            primer = 0;
+            segundo = 0;
+            operador = "";
+            esperandoSegundoNumero = false;
         }
 
         //clases vacias que no puedo borrar
