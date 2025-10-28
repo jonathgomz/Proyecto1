@@ -265,10 +265,9 @@ namespace Calculadora2
                 using (SqlConnection conexion = new SqlConnection(connectionString))
                 {
                     conexion.Open();
-                    string query = "SELECT Operacion, Resultado, FechaHora FROM HistorialCalculos ORDER BY Id DESC";
+                    string query = "SELECT Operacion, Resultado, FechaHora FROM HistorialCalculos ORDER BY Id ASC";
                     SqlCommand cmd = new SqlCommand(query, conexion);
                     SqlDataReader reader = cmd.ExecuteReader();
-
                     StringBuilder historial = new StringBuilder();
 
                     while (reader.Read())
@@ -277,7 +276,11 @@ namespace Calculadora2
                         string resultado = reader["Resultado"].ToString();
                         DateTime fechahora = Convert.ToDateTime(reader["FechaHora"]);
 
-                        historial.AppendLine($"{operacion}  {resultado}         ({fechahora})");
+                        string fechaFormateada = fechahora.ToString("dd/MM/yyyy HH:mm");
+
+                        historial.AppendLine($"{operacion} {resultado}");
+                        historial.AppendLine($"[{fechaFormateada}]");
+                        historial.AppendLine();
                     }
 
                     if (historial.Length == 0)
@@ -315,7 +318,5 @@ namespace Calculadora2
                 MessageBox.Show("Error al guardar historial: " + ex.Message);
             }
         }
-
-
     }
 }
