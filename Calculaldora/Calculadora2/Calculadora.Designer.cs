@@ -55,7 +55,6 @@
             this.btn1 = new System.Windows.Forms.Button();
             this.textBoxH = new System.Windows.Forms.TextBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.listBox1 = new System.Windows.Forms.ListBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
@@ -336,21 +335,11 @@
             this.pictureBox2.TabStop = false;
             this.pictureBox2.Click += new System.EventHandler(this.pictureBox2_Click);
             // 
-            // listBox1
-            // 
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.ItemHeight = 16;
-            this.listBox1.Location = new System.Drawing.Point(335, 26);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(311, 404);
-            this.listBox1.TabIndex = 52;
-            // 
             // Calculadora
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(660, 462);
-            this.Controls.Add(this.listBox1);
+            this.ClientSize = new System.Drawing.Size(327, 432);
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.textBoxH);
             this.Controls.Add(this.btnPi);
@@ -378,7 +367,7 @@
             this.Controls.Add(this.btn2);
             this.Controls.Add(this.btn1);
             this.Name = "Calculadora";
-            this.Text = "Form1";
+            this.Text = "Calculadora";
             this.Load += new System.EventHandler(this.Calculadora_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
@@ -415,7 +404,6 @@
         private System.Windows.Forms.Button btn1;
         private System.Windows.Forms.TextBox textBoxH;
         private System.Windows.Forms.PictureBox pictureBox2;
-        private System.Windows.Forms.ListBox listBox1;
     }
 }
 
