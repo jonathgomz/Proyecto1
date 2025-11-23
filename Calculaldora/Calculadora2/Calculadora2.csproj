@@ -46,8 +46,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Clases\CCuadrado.cs" />
     <Compile Include="Clases\Cdividir.cs" />
     <Compile Include="Clases\Cmultiplicar.cs" />
+    <Compile Include="Clases\CPhi.cs" />
+    <Compile Include="Clases\CPorcentaje.cs" />
     <Compile Include="Clases\CRaiz.cs" />
     <Compile Include="Clases\Cresta.cs" />
     <Compile Include="Clases\Csuma.cs" />
@@ -61,6 +64,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Calculadora.resx">
       <DependentUpon>Calculadora.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -83,6 +87,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="CalculadoraBD.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

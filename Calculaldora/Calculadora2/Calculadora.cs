@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -12,174 +13,311 @@ namespace Calculadora2
 {
     public partial class Calculadora : Form
     {
-        double primer;
-        double segundo;
-        string operador;
+        //string connectionString = @"Server=.\sqlexpress;Database=CalculadoraDB;TrustServerCertificate=true;Integrated Security=SSPI;"; //espress
+        string connectionString = @"Server=localhost;Database=CalculadoraDB;TrustServerCertificate=true;Integrated Security=SSPI;";
+        double primer = 0;
+        double segundo = 0;
+        string operador = "";
+        bool esperandoSegundoNumero = false; 
+
         public Calculadora()
         {
             InitializeComponent();
         }
+
 
         Clases.Csuma objS = new Clases.Csuma();
         Clases.Cresta objR = new Clases.Cresta();
         Clases.Cmultiplicar objM = new Clases.Cmultiplicar();
         Clases.Cdividir objD = new Clases.Cdividir();
         Clases.CRaiz objRa = new Clases.CRaiz();
-        private void btn0_Click(object sender, EventArgs e)
+        Clases.CPorcentaje objPo = new Clases.CPorcentaje();
+        Clases.CCuadrado objCua = new Clases.CCuadrado();
+
+        // evento para que se escriban los numeros
+        private void btnNumero_Click(object sender, EventArgs e)
         {
-            textBox1.Text = textBox1.Text + "0";
+            Button btn = sender as Button;
+            if (esperandoSegundoNumero)
+            {
+                textBox1.Clear();
+                esperandoSegundoNumero = false;
+            }
+            textBox1.Text += btn.Text;
         }
 
-        private void btn1_Click(object sender, EventArgs e)
+        public void btnPi_Click(object sender, EventArgs e)
         {
-            textBox1.Text = textBox1.Text + "1";
-        }
-
-        private void btn2_Click(object sender, EventArgs e)
-        {
-            textBox1.Text = textBox1.Text + "2";
-        }
-
-        private void btn3_Click(object sender, EventArgs e)
-        {
-            textBox1.Text = textBox1.Text + "3";
-        }
-
-        private void btn4_Click(object sender, EventArgs e)
-        {
-            textBox1.Text = textBox1.Text + "4";
-        }
-
-        private void btn5_Click(object sender, EventArgs e)
-        {
-            textBox1.Text = textBox1.Text + "5";
-        }
-
-        private void btn6_Click(object sender, EventArgs e)
-        {
-            textBox1.Text = textBox1.Text + "6";
-        }
-
-        private void btn7_Click(object sender, EventArgs e)
-        {
-            textBox1.Text = textBox1.Text + "7";
-        }
-
-        private void btn8_Click(object sender, EventArgs e)
-        {
-            textBox1.Text = textBox1.Text + "8";
-        }
-
-        private void btn9_Click(object sender, EventArgs e)
-        {
-            textBox1.Text = textBox1.Text + "9";
+            if (esperandoSegundoNumero)
+            {
+                textBox1.Clear();
+                esperandoSegundoNumero = false; 
+            }
+            textBox1.Text += Math.PI.ToString("0.####");
         }
 
         private void btnSuma_Click(object sender, EventArgs e)
         {
-            operador = "+";
+            if (string.IsNullOrEmpty(textBox1.Text)) 
+                return;
+
             primer = double.Parse(textBox1.Text);
-            textBox1.Clear();
+            operador = "+";
+            textBoxH.Text = $"{primer} {operador}";
+            esperandoSegundoNumero = true;
         }
 
         private void btnResta_Click(object sender, EventArgs e)
         {
-            operador = "-";
+            if (string.IsNullOrEmpty(textBox1.Text))
+            {
+               
+                textBox1.Text = "-";
+                return;
+            }
+
             primer = double.Parse(textBox1.Text);
-            textBox1.Clear();
+            operador = "-";
+            textBoxH.Text = $"{primer} {operador}";
+            esperandoSegundoNumero = true;
+        }
+
+        private void btnElevado_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(textBox1.Text))
+                return;
+
+            primer = double.Parse(textBox1.Text);
+            double resultado = objCua.Potencia(primer);
+
+            textBox1.Text = resultado.ToString();
+            textBoxH.Text = $"{primer}² =";
+
+            primer = resultado;
+            operador = "";
+            esperandoSegundoNumero = true;
+
         }
 
         private void btnMul_Click(object sender, EventArgs e)
         {
-            operador = "*";
+            if (string.IsNullOrEmpty(textBox1.Text))
+                return;
+
             primer = double.Parse(textBox1.Text);
-            textBox1.Clear();
+            operador = "*";
+            textBoxH.Text = $"{primer} {operador}";
+            esperandoSegundoNumero = true;
         }
 
         private void btnDiv_Click(object sender, EventArgs e)
         {
-            operador = "/";
+            if (string.IsNullOrEmpty(textBox1.Text)) 
+                return;
+
             primer = double.Parse(textBox1.Text);
-            textBox1.Clear();
+            operador = "/";
+            textBoxH.Text = $"{primer} {operador}";
+            esperandoSegundoNumero = true;
         }
 
         private void btnRaiz_Click(object sender, EventArgs e)
         {
+            if (string.IsNullOrEmpty(textBox1.Text)) return;
 
+            primer = double.Parse(textBox1.Text);
+            operador = "√";
+            double resultado = objRa.Raiz(primer);
+            textBox1.Text = resultado.ToString("0.####");
+            textBoxH.Text = $"√{primer} =";
+            esperandoSegundoNumero = false;
+        }
+
+        private void btnPercent_Click(object sender, EventArgs e)
+        {
             if (string.IsNullOrEmpty(textBox1.Text))
-            {
-                MessageBox.Show("Ingrese un número primero", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
+
+            if (string.IsNullOrEmpty(operador))
+            {
+                primer = double.Parse(textBox1.Text);
+                double resultado = primer / 100;
+                textBox1.Text = resultado.ToString();
+                textBoxH.Text = $"{primer}% =";
+            }
+            else
+            {
+                segundo = double.Parse(textBox1.Text);
+                double resultado = objPo.Porcentuar(primer, segundo, operador);
+                textBox1.Text = resultado.ToString();
+                textBoxH.Text = $"{primer} {operador} {segundo}%";
             }
 
-            operador = "√";
-            primer = double.Parse(textBox1.Text);
-            textBox1.Clear();
+            esperandoSegundoNumero = true;
         }
 
-        private void Calculadora_Load(object sender, EventArgs e)
-        {
-
-        }
-
+       
         private void btnE_Click(object sender, EventArgs e)
         {
-
-            double resultado = 0;
-            if (operador == "√")
-            {
-                resultado = objRa.Raiz(primer);
-                textBox1 .Text = resultado.ToString();
+            if (string.IsNullOrEmpty(textBox1.Text)) 
                 return;
-            }
 
+            segundo = double.Parse(textBox1.Text);
+            double resultado = 0;
 
-            segundo =  double.Parse(textBox1.Text);
-
-            double Sum;
-            double Res;
-            double Mul;
-            double Div;
-            double Rai;
-
-            switch(operador)
+            switch (operador)
             {
                 case "+":
-                    Sum = objS.Sumar( (primer), (segundo) );
-                    textBox1.Text = Sum.ToString();
+                    resultado = objS.Sumar(primer, segundo);
                     break;
-
                 case "-":
-                    Res = objR.Restar((primer), (segundo));
-                    textBox1.Text = Res.ToString();
+                    resultado = objR.Restar(primer, segundo);
                     break;
-
                 case "*":
-                    Mul = objM.Multiplicar((primer), (segundo));
-                    textBox1.Text = Mul.ToString();
+                    resultado = objM.Multiplicar(primer, segundo);
                     break;
-
                 case "/":
-                    Div = objD.Dividir((primer), (segundo));
-                    textBox1.Text = Div.ToString();
+                    if (segundo == 0)
+                    {
+                        MessageBox.Show("No se puede dividir entre 0", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        textBox1.Clear();
+                        return;
+                    }
+                    resultado = objD.Dividir(primer, segundo);
                     break;
-
+                case "%":
+                    resultado = objPo.Porcentuar(primer, segundo, operador);
+                    break;
             }
+
+            textBox1.Text = resultado.ToString();
+            textBoxH.Text = $"{primer} {operador} {segundo} =";
+            primer = resultado;
+            segundo = 0;
+            operador = "";
+            esperandoSegundoNumero = true;
+            GuardarH(textBoxH.Text, resultado.ToString());
         }
 
-        private void btnClearEntry_Click(object sender, EventArgs e)
+        
+        private void btnClearEntry_Click(object sender, EventArgs e) //Boton CE
         {
-            textBox1.Clear();
+            textBox1.Clear(); //limpiar texto grande
+            primer = 0;
+            segundo = 0;
+            operador = "";
+            esperandoSegundoNumero = false;
         }
 
+        //imagen que borra
         private void pictureBox1_Click(object sender, EventArgs e)
         {
+            if (string.IsNullOrEmpty(textBox1.Text)) 
+                return;
+
             if (textBox1.Text.Length == 1)
-                textBox1.Text = "";
+                textBox1.Clear();
             else
                 textBox1.Text = textBox1.Text.Substring(0, textBox1.Text.Length - 1);
         }
 
 
+        //hace lo mismo que la imagen pero con el boton C
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            textBox1.Clear(); 
+            textBoxH.Clear();//limpiar historial
+            primer = 0;
+            segundo = 0;
+            operador = "";
+            esperandoSegundoNumero = false;
+        }
+
+        //clases vacias que no puedo borrar
+        private void Calculadora_Load(object sender, EventArgs e) { }
+        private void textBoxH_TextChanged(object sender, EventArgs e) { }
+        private void btn0_Click(object sender, EventArgs e)
+        {}
+        private void btn1_Click(object sender, EventArgs e)
+        {}
+        private void btn2_Click(object sender, EventArgs e)
+        {}
+        private void btn3_Click(object sender, EventArgs e)
+        {}
+        private void btn4_Click(object sender, EventArgs e)
+        {}
+        private void btn5_Click(object sender, EventArgs e)
+        {}
+        private void btn6_Click(object sender, EventArgs e)
+        {}
+        private void btn7_Click(object sender, EventArgs e)
+        {}
+        private void btn8_Click(object sender, EventArgs e)
+        {}
+        private void btn9_Click(object sender, EventArgs e)
+        {}
+
+        //---------------------------------------------------------------------------------
+        //SQL
+        private void pictureBox2_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                using (SqlConnection conexion = new SqlConnection(connectionString))
+                {
+                    conexion.Open();
+                    string query = "SELECT Operacion, Resultado, FechaHora FROM HistorialCalculos ORDER BY Id ASC";
+                    SqlCommand cmd = new SqlCommand(query, conexion);
+                    SqlDataReader reader = cmd.ExecuteReader();
+                    StringBuilder historial = new StringBuilder();
+
+                    while (reader.Read())
+                    {
+                        string operacion = reader["Operacion"].ToString();
+                        string resultado = reader["Resultado"].ToString();
+                        DateTime fechahora = Convert.ToDateTime(reader["FechaHora"]);
+
+                        string fechaFormateada = fechahora.ToString("dd/MM/yyyy HH:mm");
+
+                        historial.AppendLine($"{operacion} {resultado}");
+                        historial.AppendLine($"[{fechaFormateada}]");
+                        historial.AppendLine();
+                    }
+
+                    if (historial.Length == 0)
+                    {
+                        MessageBox.Show("Historial vacío");
+                    }
+                    else
+                    {
+                        MessageBox.Show(historial.ToString(), "Historial de cálculos");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al mostrar historial: " + ex.Message);
+            }
+        }
+
+        private void GuardarH(string operacion, string resultado)
+        {
+            try
+            {
+                using (SqlConnection conexion = new SqlConnection(connectionString))
+                {
+                    conexion.Open();
+                    string query = "INSERT INTO HistorialCalculos (Operacion, Resultado, FechaHora) VALUES (@Operacion, @Resultado, GETDATE())";
+                    SqlCommand cmd = new SqlCommand(query, conexion);
+                    cmd.Parameters.AddWithValue("@Operacion", operacion);
+                    cmd.Parameters.AddWithValue("@Resultado", resultado);
+                    cmd.ExecuteNonQuery();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error al guardar historial: " + ex.Message);
+            }
+        }
     }
 }
