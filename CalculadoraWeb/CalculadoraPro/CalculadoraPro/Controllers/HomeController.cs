@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace CalculadoraPro.Controllers
+namespace CalculadoraPRO.Controllers
 {
     public class HomeController : Controller
     {
