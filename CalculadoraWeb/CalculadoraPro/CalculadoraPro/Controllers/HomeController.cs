@@ -26,5 +26,12 @@ namespace CalculadoraPRO.Controllers
 
             return View();
         }
+
+        public ActionResult API() {
+
+            ViewBag.Message = "API";
+            return View();
+        
+        }
     }
 }
