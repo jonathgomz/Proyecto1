@@ -11,7 +11,8 @@ namespace Proyecto2.Controllers
         private Calculadora db = new Calculadora();
 
         [HttpGet]
-        public IHttpActionResult GetCalculos()
+        [Route("api/Calculos/Existentes")]
+        public IHttpActionResult GetExistentes()
         {
             try
             {
@@ -85,13 +86,23 @@ namespace Proyecto2.Controllers
         }
 
         [HttpGet]
-        [Route("api/Calculos/Existentes")]
-        public IHttpActionResult GetExistentes()
+        [Route("api/Calculos/Porcentaje")]
+        public IHttpActionResult GetPorcentaje()
         {
             try
             {
-                var existentes = db.Calculos.OrderByDescending(c => c.FechaHora).Take(10).ToList();
-                return Ok(existentes);
+                var porcentajes = db.Calculos.Where(c =>
+                c.Operacion.Contains("0.07") ||
+                c.Operacion.Contains("0.05") ||
+                c.Operacion.Contains("0.10") ||
+                c.Operacion.Contains("0.15") ||
+                c.Operacion.Contains("0.20") ||
+                c.Operacion.Contains("0.25") ||
+                c.Operacion.Contains("0.30") ||
+                c.Operacion.Contains("0.50")
+                ).ToList();
+
+                return Ok(porcentajes);
             }
             catch (Exception ex)
             {
