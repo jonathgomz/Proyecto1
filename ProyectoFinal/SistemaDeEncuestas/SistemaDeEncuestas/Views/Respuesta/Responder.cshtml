@@ -1,0 +1,145 @@
+﻿@model SistemaDeEncuestas.Models.Encuesta
+@using System.Linq
+
+@{
+    ViewBag.Title = "Responder Encuesta";
+}
+<h2>Responder</h2>
+
+<div class="container">
+    <div class="page-header">
+        <h2>@Model.Titulo</h2>
+        @if (!string.IsNullOrEmpty(Model.Descripcion))
+        {
+            <p class="lead">@Model.Descripcion</p>
+        }
+    </div>
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert">&times;</button>
+            @TempData["Error"]
+        </div>
+    }
+
+    @using (Html.BeginForm("Responder", "Respuesta", FormMethod.Post, new { id = "formEncuesta" }))
+    {
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="encuestaId" value="@Model.Id" />
+        <input type="hidden" name="tiempoSegundos" id="tiempoSegundos" value="0" />
+
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h4>Información del Participante</h4>
+            </div>
+            <div class="panel-body">
+                <div class="form-group">
+                    <label>Nombre Completo <span class="text-danger">*</span></label>
+                    <input type="text" name="usuario" class="form-control" required placeholder="Ingrese su nombre" />
+                </div>
+            </div>
+        </div>
+
+        foreach (var pregunta in Model.Preguntas.OrderBy(p => p.Orden))
+            {
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4>Pregunta @pregunta.Orden <span class="text-danger">*</span></h4>
+                </div>
+                <div class="panel-body">
+                    <p><strong>@pregunta.Texto</strong></p>
+
+                    @if (pregunta.TipoPregunta == "Unica")
+                    {
+                        <div class="radio-group">
+                            @foreach (var opcion in pregunta.Opciones.OrderBy(o => o.Orden))
+                            {
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="pregunta_@pregunta.Id" value="@opcion.Id" required />
+                                        @opcion.TextoOpcion
+                                    </label>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="checkbox-group">
+                            @foreach (var opcion in pregunta.Opciones.OrderBy(o => o.Orden))
+                            {
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" class="checkbox-pregunta" data-pregunta="@pregunta.Id" value="@opcion.Id" />
+                                        @opcion.TextoOpcion
+                                    </label>
+                                </div>
+                            }
+                            <input type="hidden" name="pregunta_@pregunta.Id" id="pregunta_@pregunta.Id" />
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+    
+
+        <div class="form-group text-center">
+            <button type="submit" class="btn btn-success btn-lg">
+                <span class="glyphicon glyphicon-ok"></span> Enviar Respuestas
+            </button>
+            <a href="@Url.Action("Index", "Encuesta")" class="btn btn-default btn-lg">
+                <span class="glyphicon glyphicon-remove"></span> Cancelar
+            </a>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        var tiempoInicio = new Date();
+
+        // Actualizar tiempo cada segundo
+        setInterval(function () {
+            var segundos = Math.floor((new Date() - tiempoInicio) / 1000);
+            $('#tiempoSegundos').val(segundos);
+        }, 1000);
+
+        // Manejar checkboxes de preguntas múltiples
+        $('.checkbox-pregunta').change(function () {
+            var preguntaId = $(this).data('pregunta');
+            var valores = [];
+
+            $('input[data-pregunta="' + preguntaId + '"]:checked').each(function () {
+                valores.push($(this).val());
+            });
+
+            $('#pregunta_' + preguntaId).val(valores.join(','));
+        });
+
+        // Validar que al menos una opción esté marcada en preguntas múltiples
+        $('#formEncuesta').submit(function (e) {
+            var valid = true;
+            $('.checkbox-group').each(function () {
+                var checkboxes = $(this).find('.checkbox-pregunta');
+                var checked = $(this).find('.checkbox-pregunta:checked').length;
+
+                if (checkboxes.length > 0 && checked === 0) {
+                    valid = false;
+                    $(this).closest('.panel').addClass('panel-danger');
+                    if ($(this).find('.error-msg').length === 0) {
+                        $(this).append('<p class="text-danger error-msg">Debe seleccionar al menos una opción</p>');
+                    }
+                } else {
+                    $(this).closest('.panel').removeClass('panel-danger');
+                    $(this).find('.error-msg').remove();
+                }
+            });
+
+            if (!valid) {
+                e.preventDefault();
+                alert('Por favor responda todas las preguntas');
+            }
+        });
+    </script>
+}

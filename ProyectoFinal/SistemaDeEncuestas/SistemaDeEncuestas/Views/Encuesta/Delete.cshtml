@@ -1,0 +1,64 @@
+﻿@model SistemaDeEncuestas.Models.Encuesta
+
+@{
+    ViewBag.Title = "Eliminar Encuesta";
+}
+
+<h2>Eliminar Encuesta</h2>
+
+<div class="alert alert-danger">
+    <h4><span class="glyphicon glyphicon-warning-sign"></span> ¿Está seguro de que desea eliminar esta encuesta?</h4>
+    <p>Esta acción no se puede deshacer.</p>
+</div>
+
+<div class="panel panel-danger">
+    <div class="panel-heading">
+        <h3 class="panel-title">Información de la Encuesta</h3>
+    </div>
+    <div class="panel-body">
+        <dl class="dl-horizontal">
+            <dt>ID:</dt>
+            <dd>@Model.Id</dd>
+
+            <dt>Título:</dt>
+            <dd>@Model.Titulo</dd>
+
+            <dt>Descripción:</dt>
+            <dd>@(Model.Descripcion ?? "Sin descripción")</dd>
+
+            <dt>Creador:</dt>
+            <dd>@Model.Creador</dd>
+
+            <dt>Fecha de Creación:</dt>
+            <dd>@Model.FechaCreacion.ToString("dd/MM/yyyy HH:mm")</dd>
+
+            <dt>Total de Preguntas:</dt>
+            <dd>@Model.Preguntas.Count</dd>
+
+            <dt>Total de Respuestas:</dt>
+            <dd>@Model.Respuestas.Count</dd>
+        </dl>
+
+        @if (Model.Respuestas.Count > 0)
+        {
+            <div class="alert alert-warning">
+                <strong>¡Advertencia!</strong> Esta encuesta tiene <strong>@Model.Respuestas.Count</strong> respuesta(s) registrada(s) que también serán eliminadas.
+            </div>
+        }
+    </div>
+</div>
+
+@using (Html.BeginForm("Delete", "Encuesta", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.Id)
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-danger">
+            <span class="glyphicon glyphicon-trash"></span> Sí, Eliminar
+        </button>
+        <a href="@Url.Action("Index", "Encuesta")" class="btn btn-default">
+            <span class="glyphicon glyphicon-arrow-left"></span> Cancelar
+        </a>
+    </div>
+}

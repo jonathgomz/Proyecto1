@@ -1,0 +1,52 @@
+﻿@model List<SistemaDeEncuestas.Models.RespuestaUsuario>
+
+@{
+    ViewBag.Title = "Lista de Respuestas";
+    var encuestaTitulo = ViewBag.EncuestaTitulo;
+}
+
+<h2>Lista de Respuestas</h2>
+<h4 class="text-muted">Encuesta: @encuestaTitulo</h4>
+
+<p>
+    <a href="@Url.Action("Resultados", new { id = Model.FirstOrDefault()?.EncuestaId })" class="btn btn-primary">
+        <span class="glyphicon glyphicon-stats"></span> Ver Estadísticas
+    </a>
+</p>
+
+@if (Model.Any())
+{
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Participante</th>
+                <th>Fecha</th>
+                <th>Tiempo (seg)</th>
+                <th style="width: 120px;">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var r in Model)
+            {
+                <tr>
+                    <td>@r.Id</td>
+                    <td>@r.Usuario</td>
+                    <td>@r.Fecha.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>@r.TiempoSegundos</td>
+                    <td>
+                        <a href="@Url.Action("DetalleRespuesta", new { id = r.Id })" class="btn btn-info btn-sm">
+                            <span class="glyphicon glyphicon-eye-open"></span> Ver
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-warning">
+        <strong>No hay respuestas.</strong> Aún no se han registrado respuestas para esta encuesta.
+    </div>
+}

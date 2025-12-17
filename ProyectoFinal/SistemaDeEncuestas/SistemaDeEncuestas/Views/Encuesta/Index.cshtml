@@ -1,0 +1,96 @@
+﻿
+@model List<SistemaDeEncuestas.Models.Encuesta>
+
+@{
+    ViewBag.Title = "Encuestas";
+}
+
+<h2>Lista de Encuestas</h2>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        @TempData["Success"]
+    </div>
+}
+
+<div class="row" style="margin-bottom: 15px;">
+    <div class="col-md-6">
+        <a href="@Url.Action("Create", "Encuesta")" class="btn btn-primary">
+            <span class="glyphicon glyphicon-plus"></span> Crear Nueva Encuesta
+        </a>
+    </div>
+    <div class="col-md-6 text-right">
+        <div class="btn-group">
+            <a href="@Url.Action("Index", new { orden = "id" })"
+               class="btn btn-default btn-sm @(ViewBag.OrdenActual == "id" ? "active" : "")">
+                <span class="glyphicon glyphicon-sort-by-order"></span> ID ↑
+            </a>
+            <a href="@Url.Action("Index", new { orden = "id_desc" })"
+               class="btn btn-default btn-sm @(ViewBag.OrdenActual == "id_desc" ? "active" : "")">
+                <span class="glyphicon glyphicon-sort-by-order-alt"></span> ID ↓
+            </a>
+            <a href="@Url.Action("Index", new { orden = "fecha_asc" })"
+               class="btn btn-default btn-sm @(ViewBag.OrdenActual == "fecha_asc" ? "active" : "")">
+                <span class="glyphicon glyphicon-time"></span> Fecha ↑
+            </a>
+            <a href="@Url.Action("Index", new { orden = "fecha" })"
+               class="btn btn-default btn-sm @(ViewBag.OrdenActual == "fecha" ? "active" : "")">
+                <span class="glyphicon glyphicon-time"></span> Fecha ↓
+            </a>
+        </div>
+    </div>
+</div>
+
+@if (Model.Any())
+{
+    <table class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Título</th>
+                <th>Descripción</th>
+                <th>Creador</th>
+                <th>Fecha Creación</th>
+                <th style="width: 200px;">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var e in Model)
+            {
+                <tr>
+                    <td>@e.Id</td>
+                    <td>@e.Titulo</td>
+                    <td>@(e.Descripcion?.Length > 50 ? e.Descripcion.Substring(0, 50) + "..." : e.Descripcion)</td>
+                    <td>@e.Creador</td>
+                    <td>@e.FechaCreacion.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td>
+                        <a href="@Url.Action("Responder", "Respuesta", new { id = e.Id })"
+                           class="btn btn-success btn-sm" title="Responder">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        </a>
+                        <a href="@Url.Action("Details", "Encuesta", new { id = e.Id })"
+                           class="btn btn-info btn-sm" title="Ver Detalles">
+                            <span class="glyphicon glyphicon-eye-open"></span>
+                        </a>
+                        <a href="@Url.Action("Edit", "Encuesta", new { id = e.Id })"
+                           class="btn btn-warning btn-sm" title="Editar">
+                            <span class="glyphicon glyphicon-cog"></span>
+                        </a>
+                        <a href="@Url.Action("Delete", "Encuesta", new { id = e.Id })"
+                           class="btn btn-danger btn-sm" title="Eliminar">
+                            <span class="glyphicon glyphicon-trash"></span>
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info">
+        <strong>No hay encuestas.</strong> Crea tu primera encuesta haciendo clic en el botón de arriba.
+    </div>
+}

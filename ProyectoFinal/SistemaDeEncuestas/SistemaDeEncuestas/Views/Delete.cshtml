@@ -1,0 +1,45 @@
+﻿@model SistemaDeEncuestas.Models.Encuesta
+
+@{
+    ViewBag.Title = "Editar Encuesta";
+}
+
+<h2>Editar Encuesta</h2>
+
+@using (Html.BeginForm("Edit", "Encuesta", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.Id)
+    @Html.HiddenFor(m => m.FechaCreacion)
+
+    <div class="form-group">
+        <label>Título</label>
+        @Html.TextBoxFor(m => m.Titulo, new { @class = "form-control", required = "required" })
+        @Html.ValidationMessageFor(m => m.Titulo, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        <label>Descripción</label>
+        @Html.TextAreaFor(m => m.Descripcion, new { @class = "form-control", rows = 3 })
+        @Html.ValidationMessageFor(m => m.Descripcion, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        <label>Creador</label>
+        @Html.TextBoxFor(m => m.Creador, new { @class = "form-control", required = "required" })
+        @Html.ValidationMessageFor(m => m.Creador, "", new { @class = "text-danger" })
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-success">
+            <span class="glyphicon glyphicon-save"></span> Guardar Cambios
+        </button>
+        <a href="@Url.Action("Index", "Encuesta")" class="btn btn-default">
+            <span class="glyphicon glyphicon-remove"></span> Cancelar
+        </a>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

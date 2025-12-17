@@ -1,0 +1,19 @@
+﻿@model SistemaDeEncuestas.Models.Encuesta
+@{
+    ViewBag.Title = "Reportes - " + Model.Titulo;
+}
+
+<h2>@Model.Titulo</h2>
+<p>@Model.Descripcion</p>
+
+<hr />
+
+<p>
+    Total de respuestas: <strong>@Model.Respuestas.Count</strong>
+</p>
+
+<a class="btn btn-secondary" href="@Url.Action("Index")">
+    ← Volver a encuestas
+</a>
+
+<hr />

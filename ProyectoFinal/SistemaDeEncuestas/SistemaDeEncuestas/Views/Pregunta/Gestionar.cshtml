@@ -1,0 +1,83 @@
+﻿@model List<SistemaDeEncuestas.Models.Pregunta>
+
+@{
+    ViewBag.Title = "Gestionar Preguntas";
+    var encuestaId = ViewBag.EncuestaId;
+    var encuestaTitulo = ViewBag.EncuestaTitulo;
+}
+
+<h2>Gestionar Preguntas</h2>
+<h4 class="text-muted">Encuesta: @encuestaTitulo</h4>
+
+@if (TempData["Success"] != null)
+{
+    <div class="alert alert-success alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        @TempData["Success"]
+    </div>
+}
+
+<p>
+    <a href="@Url.Action("Create", "Pregunta", new { encuestaId = encuestaId })" class="btn btn-primary">
+        <span class="glyphicon glyphicon-plus"></span> Agregar Pregunta
+    </a>
+    <a href="@Url.Action("Details", "Encuesta", new { id = encuestaId })" class="btn btn-default">
+        <span class="glyphicon glyphicon-arrow-left"></span> Volver a la Encuesta
+    </a>
+</p>
+
+@if (Model.Any())
+{
+    <div class="panel-group" id="accordion">
+        @foreach (var pregunta in Model)
+        {
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#pregunta@(pregunta.Id)">
+                            <strong>Pregunta @pregunta.Orden:</strong> @pregunta.Texto
+                            <span class="label label-info">@pregunta.TipoPregunta</span>
+                        </a>
+                        <div class="pull-right" style="margin-top: -5px;">
+                            <a href="@Url.Action("Edit", "Pregunta", new { id = pregunta.Id })"
+                               class="btn btn-warning btn-xs">
+                                <span class="glyphicon glyphicon-pencil"></span>
+                            </a>
+                            <a href="@Url.Action("Delete", "Pregunta", new { id = pregunta.Id })"
+                               class="btn btn-danger btn-xs">
+                                <span class="glyphicon glyphicon-trash"></span>
+                            </a>
+                        </div>
+                    </h4>
+                </div>
+                <div id="pregunta@(pregunta.Id)" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        @if (pregunta.Opciones.Any())
+                        {
+                            <strong>Opciones:</strong>
+                            <ul class="list-group" style="margin-top: 10px;">
+                                @foreach (var opcion in pregunta.Opciones.OrderBy(o => o.Orden))
+                                {
+                                    <li class="list-group-item">
+                                        <span class="badge">@opcion.Orden</span>
+                                        @opcion.TextoOpcion
+                                    </li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <p class="text-muted">Sin opciones definidas</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="alert alert-warning">
+        <strong>¡No hay preguntas!</strong> Agrega la primera pregunta haciendo clic en el botón de arriba.
+    </div>
+}

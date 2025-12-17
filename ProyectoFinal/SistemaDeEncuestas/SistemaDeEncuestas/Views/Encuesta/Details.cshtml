@@ -1,0 +1,86 @@
+﻿@model SistemaDeEncuestas.Models.Encuesta
+
+@{
+    ViewBag.Title = "Detalles de Encuesta";
+}
+
+<h2>Detalles de Encuesta</h2>
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">@Model.Titulo</h3>
+    </div>
+    <div class="panel-body">
+        <dl class="dl-horizontal">
+            <dt>ID:</dt>
+            <dd>@Model.Id</dd>
+
+            <dt>Descripción:</dt>
+            <dd>@(Model.Descripcion ?? "Sin descripción")</dd>
+
+            <dt>Creador:</dt>
+            <dd>@Model.Creador</dd>
+
+            <dt>Fecha de Creación:</dt>
+            <dd>@Model.FechaCreacion.ToString("dd/MM/yyyy HH:mm")</dd>
+
+            <dt>Total de Preguntas:</dt>
+            <dd>@Model.Preguntas.Count</dd>
+
+            <dt>Total de Respuestas:</dt>
+            <dd>@Model.Respuestas.Count</dd>
+        </dl>
+    </div>
+</div>
+
+@if (Model.Preguntas.Any())
+{
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4>Preguntas de la Encuesta</h4>
+        </div>
+        <div class="panel-body">
+            @foreach (var pregunta in Model.Preguntas.OrderBy(p => p.Orden))
+            {
+                <div class="well">
+                    <h5>
+                        <strong>Pregunta @pregunta.Orden:</strong> @pregunta.Texto
+                        <span class="label label-info">@pregunta.TipoPregunta</span>
+                    </h5>
+                    @if (pregunta.Opciones.Any())
+                    {
+                        <ul class="list-group">
+                            @foreach (var opcion in pregunta.Opciones.OrderBy(o => o.Orden))
+                            {
+                                <li class="list-group-item">@opcion.TextoOpcion</li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p class="text-muted">Sin opciones definidas</p>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+}
+else
+{
+    <div class="alert alert-warning">
+        <strong>¡Atención!</strong> Esta encuesta aún no tiene preguntas.
+        <a href="@Url.Action("Gestionar", "Pregunta", new { id = Model.Id })" class="alert-link">Agregar preguntas</a>
+    </div>
+}
+
+<div class="btn-group">
+    <a href="@Url.Action("Edit", "Encuesta", new { id = Model.Id })" class="btn btn-warning">
+        <span class="glyphicon glyphicon-pencil"></span> Editar
+    </a>
+    <a href="@Url.Action("Delete", "Encuesta", new { id = Model.Id })" class="btn btn-danger">
+        <span class="glyphicon glyphicon-trash"></span> Eliminar
+    </a>
+    <a href="@Url.Action("Index", "Encuesta")" class="btn btn-default">
+        <span class="glyphicon glyphicon-arrow-left"></span> Volver al Listado
+    </a>
+</div>

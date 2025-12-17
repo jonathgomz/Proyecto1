@@ -1,0 +1,127 @@
+﻿
+@{
+    ViewBag.Title = "Resultados";
+}
+
+<h2>Resultados</h2>
+
+@model SistemaDeEncuestas.Models.Encuesta
+
+@{
+    ViewBag.Title = "Resultados de la Encuesta";
+    var totalRespuestas = Model.Respuestas.Count;
+}
+
+<h2>Resultados: @Model.Titulo</h2>
+<p class="text-muted">@Model.Descripcion</p>
+
+<div class="alert alert-info">
+    <strong>Total de Respuestas:</strong> @totalRespuestas
+</div>
+
+<div class="btn-group" style="margin-bottom: 20px;">
+    <a href="@Url.Action("ListaRespuestas", new { id = Model.Id })" class="btn btn-primary">
+        <span class="glyphicon glyphicon-list"></span> Ver Lista de Respuestas
+    </a>
+    <a href="@Url.Action("Details", "Encuesta", new { id = Model.Id })" class="btn btn-default">
+        <span class="glyphicon glyphicon-arrow-left"></span> Volver
+    </a>
+</div>
+
+@if (totalRespuestas > 0)
+{
+    foreach (var pregunta in Model.Preguntas.OrderBy(p => p.Orden))
+    {
+        var respuestasPregunta = Model.Respuestas.SelectMany(r => r.Detalles).Where(d => d.PreguntaId == pregunta.Id).ToList();
+
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h4>Pregunta @pregunta.Orden: @pregunta.Texto</h4>
+            </div>
+            <div class="panel-body">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Opción</th>
+                            <th style="width: 150px;">Votos</th>
+                            <th style="width: 100px;">Porcentaje</th>
+                            <th>Gráfico</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var opcion in pregunta.Opciones.OrderBy(o => o.Orden))
+                        {
+                            var votosOpcion = respuestasPregunta.Count(d => d.OpcionId == opcion.Id);
+                            var porcentaje = totalRespuestas > 0 ? (votosOpcion * 100.0 / totalRespuestas) : 0;
+
+                            <tr>
+                                <td>@opcion.TextoOpcion</td>
+                                <td><strong>@votosOpcion</strong></td>
+                                <td><span class="label label-info">@porcentaje.ToString("F1")%</span></td>
+                                <td>
+                                    <div class="progress" style="margin-bottom: 0;">
+                                        <div class="progress-bar progress-bar-success"
+                                             role="progressbar"
+                                             style="width: @porcentaje%">
+                                            @if (porcentaje > 10)
+                                            {
+                                                <span>@porcentaje.ToString("F1")%</span>
+                                            }
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <div style="margin-top: 15px;">
+                    <canvas id="chart_@pregunta.Id" height="80"></canvas>
+                </div>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div class="alert alert-warning">
+        <strong>No hay respuestas aún.</strong> Esta encuesta aún no ha sido respondida.
+    </div>
+}
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.min.js"></script>
+    <script>
+        @foreach (var pregunta in Model.Preguntas.OrderBy(p => p.Orden))
+        {
+            var respuestasPregunta = Model.Respuestas.SelectMany(r => r.Detalles).Where(d => d.PreguntaId == pregunta.Id).ToList();
+            var labels = string.Join(",", pregunta.Opciones.OrderBy(o => o.Orden).Select(o => "'" + o.TextoOpcion + "'"));
+            var data = string.Join(",", pregunta.Opciones.OrderBy(o => o.Orden).Select(o => respuestasPregunta.Count(d => d.OpcionId == o.Id)));
+
+            <text>
+            new Chart(document.getElementById('chart_@pregunta.Id'), {
+                type: 'bar',
+                data: {
+                    labels: [@Html.Raw(labels)],
+                    datasets: [{
+                        label: 'Votos',
+                        data: [@Html.Raw(data)],
+                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        yAxes: [{
+                            ticks: { beginAtZero: true, stepSize: 1 }
+                        }]
+                    },
+                    legend: { display: false }
+                }
+            });
+            </text>
+        }
+    </script>
+}

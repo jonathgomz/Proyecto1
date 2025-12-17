@@ -1,0 +1,145 @@
+﻿@model SistemaDeEncuestas.Models.Pregunta
+
+@{
+    ViewBag.Title = "Crear Pregunta";
+    var encuestaTitulo = ViewBag.EncuestaTitulo;
+}
+
+<h2>Crear Nueva Pregunta</h2>
+<h4 class="text-muted">Encuesta: @encuestaTitulo</h4>
+
+@using (Html.BeginForm("Create", "Pregunta", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.EncuestaId)
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4>Datos de la Pregunta</h4>
+        </div>
+        <div class="panel-body">
+            <div class="form-group">
+                <label>Texto de la Pregunta</label>
+                @Html.TextAreaFor(m => m.Texto, new { @class = "form-control", rows = 2, required = "required", placeholder = "Escribe aquí tu pregunta" })
+                @Html.ValidationMessageFor(m => m.Texto, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Tipo de Pregunta</label>
+                        @Html.DropDownListFor(m => m.TipoPregunta,
+                            new SelectList(new[] {
+                                new { Value = "Unica", Text = "Respuesta Única (Radio)" },
+                                new { Value = "Multiple", Text = "Respuesta Múltiple (Checkbox)" }
+                            }, "Value", "Text"),
+                            new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Orden</label>
+                        @Html.TextBoxFor(m => m.Orden, new { @class = "form-control", type = "number", min = "1" })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h4>Opciones de Respuesta</h4>
+        </div>
+        <div class="panel-body">
+            <div id="opciones-container">
+                <div class="form-group opcion-item">
+                    <label>Opción 1</label>
+                    <div class="input-group">
+                        <input type="text" name="opciones" class="form-control" placeholder="Texto de la opción" required />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-danger btn-remove-opcion" disabled>
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group opcion-item">
+                    <label>Opción 2</label>
+                    <div class="input-group">
+                        <input type="text" name="opciones" class="form-control" placeholder="Texto de la opción" required />
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-danger btn-remove-opcion">
+                                <span class="glyphicon glyphicon-remove"></span>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <button type="button" id="btn-add-opcion" class="btn btn-success btn-sm">
+                <span class="glyphicon glyphicon-plus"></span> Agregar Opción
+            </button>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">
+            <span class="glyphicon glyphicon-save"></span> Guardar Pregunta
+        </button>
+        <a href="@Url.Action("Gestionar", "Pregunta", new { id = Model.EncuestaId })" class="btn btn-default">
+            <span class="glyphicon glyphicon-remove"></span> Cancelar
+        </a>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        $(document).ready(function () {
+            var opcionCount = 2;
+
+            // Agregar nueva opción
+            $('#btn-add-opcion').click(function () {
+                opcionCount++;
+                var newOpcion = `
+                    <div class="form-group opcion-item">
+                        <label>Opción ${opcionCount}</label>
+                        <div class="input-group">
+                            <input type="text" name="opciones" class="form-control" placeholder="Texto de la opción" />
+                            <span class="input-group-btn">
+                                <button type="button" class="btn btn-danger btn-remove-opcion">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                `;
+                $('#opciones-container').append(newOpcion);
+                updateRemoveButtons();
+            });
+
+            // Eliminar opción
+            $(document).on('click', '.btn-remove-opcion', function () {
+                $(this).closest('.opcion-item').remove();
+                updateLabels();
+                updateRemoveButtons();
+            });
+
+            function updateLabels() {
+                $('.opcion-item').each(function (index) {
+                    $(this).find('label').text('Opción ' + (index + 1));
+                });
+                opcionCount = $('.opcion-item').length;
+            }
+
+            function updateRemoveButtons() {
+                var count = $('.opcion-item').length;
+                if (count <= 2) {
+                    $('.btn-remove-opcion').prop('disabled', true);
+                } else {
+                    $('.btn-remove-opcion').prop('disabled', false);
+                    $('.opcion-item:first .btn-remove-opcion').prop('disabled', true);
+                }
+            }
+        });
+    </script>
+}

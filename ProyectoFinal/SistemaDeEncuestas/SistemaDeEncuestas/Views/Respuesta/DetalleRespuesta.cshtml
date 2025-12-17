@@ -1,0 +1,60 @@
+﻿@model SistemaDeEncuestas.Models.RespuestaUsuario
+
+@{
+    ViewBag.Title = "Detalle de Respuesta";
+}
+
+<h2>Detalle de Respuesta</h2>
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h4>Información del Participante</h4>
+    </div>
+    <div class="panel-body">
+        <dl class="dl-horizontal">
+            <dt>Encuesta:</dt>
+            <dd>@Model.Encuesta.Titulo</dd>
+
+            <dt>Participante:</dt>
+            <dd><strong>@Model.Usuario</strong></dd>
+
+            <dt>Fecha:</dt>
+            <dd>@Model.Fecha.ToString("dd/MM/yyyy HH:mm:ss")</dd>
+
+            <dt>Tiempo:</dt>
+            <dd>@Model.TiempoSegundos segundos</dd>
+        </dl>
+    </div>
+</div>
+
+<h3>Respuestas</h3>
+
+@{
+    var respuestasAgrupadas = Model.Detalles.GroupBy(d => d.PreguntaId);
+}
+
+@foreach (var grupo in respuestasAgrupadas.OrderBy(g => g.First().Pregunta.Orden))
+{
+    var pregunta = grupo.First().Pregunta;
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h5><strong>@pregunta.Texto</strong></h5>
+        </div>
+        <div class="panel-body">
+            <ul class="list-group">
+                @foreach (var detalle in grupo)
+                {
+                    <li class="list-group-item">
+                        <span class="glyphicon glyphicon-ok text-success"></span>
+                        @detalle.Opcion.TextoOpcion
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+}
+
+<a href="@Url.Action("ListaRespuestas", new { id = Model.EncuestaId })" class="btn btn-default">
+    <span class="glyphicon glyphicon-arrow-left"></span> Volver a la Lista
+</a>

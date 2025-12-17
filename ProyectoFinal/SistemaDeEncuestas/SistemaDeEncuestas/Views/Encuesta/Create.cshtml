@@ -1,0 +1,245 @@
+﻿@model SistemaDeEncuestas.Models.EncuestaConPreguntasViewModel
+
+@{
+    ViewBag.Title = "Crear Encuesta Completa";
+}
+
+<h2>Crear Nueva Encuesta</h2>
+
+@using (Html.BeginForm("Create", "Encuesta", FormMethod.Post, new { id = "formEncuesta" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h4><span class="glyphicon glyphicon-file"></span> Información de la Encuesta</h4>
+        </div>
+        <div class="panel-body">
+            <div class="form-group">
+                <label>Título</label>
+                @Html.TextBoxFor(m => m.Titulo, new { @class = "form-control", required = "required", placeholder = "Título de la encuesta" })
+                @Html.ValidationMessageFor(m => m.Titulo, "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group">
+                <label>Descripción</label>
+                @Html.TextAreaFor(m => m.Descripcion, new { @class = "form-control", rows = 3, placeholder = "Descripción opcional" })
+            </div>
+
+            <div class="form-group">
+                <label>Creador</label>
+                @Html.TextBoxFor(m => m.Creador, new { @class = "form-control", required = "required", placeholder = "Nombre del creador" })
+                @Html.ValidationMessageFor(m => m.Creador, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+
+    <div class="panel panel-info">
+        <div class="panel-heading">
+            <h4><span class="glyphicon glyphicon-question-sign"></span> Preguntas de la Encuesta</h4>
+        </div>
+        <div class="panel-body">
+            <div id="preguntas-container">
+                <!-- Las preguntas se agregarán aquí dinámicamente -->
+            </div>
+
+            <button type="button" id="btn-agregar-pregunta" class="btn btn-primary">
+                <span class="glyphicon glyphicon-plus"></span> Agregar Pregunta
+            </button>
+        </div>
+    </div>
+
+    <div class="form-group text-center">
+        <button type="submit" class="btn btn-success btn-lg">
+            <span class="glyphicon glyphicon-save"></span> Guardar Encuesta Completa
+        </button>
+        <a href="@Url.Action("Index")" class="btn btn-default btn-lg">
+            <span class="glyphicon glyphicon-remove"></span> Cancelar
+        </a>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        var preguntaCount = 0;
+
+        $(document).ready(function () {
+            // Agregar primera pregunta automáticamente
+            agregarPregunta();
+        });
+
+        $('#btn-agregar-pregunta').click(function () {
+            agregarPregunta();
+        });
+
+        function agregarPregunta() {
+            preguntaCount++;
+            var html = `
+                <div class="panel panel-default pregunta-item" data-pregunta="${preguntaCount}">
+                    <div class="panel-heading">
+                        <h5 style="display: inline-block;">
+                            <strong>Pregunta ${preguntaCount}</strong>
+                        </h5>
+                        <button type="button" class="btn btn-danger btn-xs pull-right btn-eliminar-pregunta">
+                            <span class="glyphicon glyphicon-trash"></span> Eliminar
+                        </button>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="panel-body">
+                        <input type="hidden" name="Preguntas[${preguntaCount - 1}].Orden" value="${preguntaCount}" />
+
+                        <div class="form-group">
+                            <label>Texto de la Pregunta</label>
+                            <textarea name="Preguntas[${preguntaCount - 1}].Texto"
+                                      class="form-control"
+                                      rows="2"
+                                      required
+                                      placeholder="Escribe tu pregunta aquí"></textarea>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Tipo de Pregunta</label>
+                                    <select name="Preguntas[${preguntaCount - 1}].TipoPregunta" class="form-control">
+                                        <option value="Unica">Respuesta Única (Radio)</option>
+                                        <option value="Multiple">Respuesta Múltiple (Checkbox)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label><strong>Opciones de Respuesta</strong></label>
+                            <div class="opciones-container">
+                                <div class="input-group opcion-item" style="margin-bottom: 5px;">
+                                    <span class="input-group-addon">1</span>
+                                    <input type="text"
+                                           name="Preguntas[${preguntaCount - 1}].Opciones[0]"
+                                           class="form-control"
+                                           placeholder="Opción 1"
+                                           required />
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-danger btn-quitar-opcion" disabled>
+                                            <span class="glyphicon glyphicon-minus"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <div class="input-group opcion-item" style="margin-bottom: 5px;">
+                                    <span class="input-group-addon">2</span>
+                                    <input type="text"
+                                           name="Preguntas[${preguntaCount - 1}].Opciones[1]"
+                                           class="form-control"
+                                           placeholder="Opción 2"
+                                           required />
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-danger btn-quitar-opcion">
+                                            <span class="glyphicon glyphicon-minus"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-success btn-xs btn-agregar-opcion" style="margin-top: 5px;">
+                                <span class="glyphicon glyphicon-plus"></span> Agregar Opción
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            $('#preguntas-container').append(html);
+            actualizarNumeroPreguntas();
+        }
+
+        // Eliminar pregunta
+        $(document).on('click', '.btn-eliminar-pregunta', function () {
+            if ($('.pregunta-item').length > 1) {
+                $(this).closest('.pregunta-item').remove();
+                actualizarNumeroPreguntas();
+                reindexarPreguntas();
+            } else {
+                alert('Debe haber al menos una pregunta');
+            }
+        });
+
+        // Agregar opción
+        $(document).on('click', '.btn-agregar-opcion', function () {
+            var container = $(this).siblings('.opciones-container');
+            var opcionCount = container.find('.opcion-item').length;
+            var preguntaIndex = $(this).closest('.pregunta-item').index();
+
+            var nuevaOpcion = `
+                <div class="input-group opcion-item" style="margin-bottom: 5px;">
+                    <span class="input-group-addon">${opcionCount + 1}</span>
+                    <input type="text"
+                           name="Preguntas[${preguntaIndex}].Opciones[${opcionCount}]"
+                           class="form-control"
+                           placeholder="Opción ${opcionCount + 1}" />
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-danger btn-quitar-opcion">
+                            <span class="glyphicon glyphicon-minus"></span>
+                        </button>
+                    </span>
+                </div>
+            `;
+            container.append(nuevaOpcion);
+            actualizarBotonesOpcion(container);
+        });
+
+        // Quitar opción
+        $(document).on('click', '.btn-quitar-opcion', function () {
+            var container = $(this).closest('.opciones-container');
+            if (container.find('.opcion-item').length > 2) {
+                $(this).closest('.opcion-item').remove();
+                reindexarOpciones(container);
+                actualizarBotonesOpcion(container);
+            }
+        });
+
+        function actualizarNumeroPreguntas() {
+            $('.pregunta-item').each(function (index) {
+                $(this).find('.panel-heading h5 strong').text('Pregunta ' + (index + 1));
+                $(this).find('input[name$=".Orden"]').val(index + 1);
+            });
+        }
+
+        function reindexarPreguntas() {
+            $('.pregunta-item').each(function (preguntaIndex) {
+                // Actualizar indices de pregunta
+                $(this).find('input[name^="Preguntas["]').each(function () {
+                    var name = $(this).attr('name');
+                    var newName = name.replace(/Preguntas\[\d+\]/, 'Preguntas[' + preguntaIndex + ']');
+                    $(this).attr('name', newName);
+                });
+
+                $(this).find('textarea[name^="Preguntas["]').each(function () {
+                    var name = $(this).attr('name');
+                    var newName = name.replace(/Preguntas\[\d+\]/, 'Preguntas[' + preguntaIndex + ']');
+                    $(this).attr('name', newName);
+                });
+
+                $(this).find('select[name^="Preguntas["]').each(function () {
+                    var name = $(this).attr('name');
+                    var newName = name.replace(/Preguntas\[\d+\]/, 'Preguntas[' + preguntaIndex + ']');
+                    $(this).attr('name', newName);
+                });
+            });
+        }
+
+        function reindexarOpciones(container) {
+            container.find('.opcion-item').each(function (index) {
+                $(this).find('.input-group-addon').text(index + 1);
+                $(this).find('input').attr('placeholder', 'Opción ' + (index + 1));
+
+                var preguntaIndex = $(this).closest('.pregunta-item').index();
+                $(this).find('input').attr('name', 'Preguntas[' + preguntaIndex + '].Opciones[' + index + ']');
+            });
+        }
+
+        function actualizarBotonesOpcion(container) {
+            var count = container.find('.opcion-item').length;
+            container.find('.btn-quitar-opcion').prop('disabled', count <= 2);
+        }
+    </script>
+}}

@@ -1,0 +1,50 @@
+﻿@model SistemaDeEncuestas.Models.RespuestaUsuario
+
+@{
+    ViewBag.Title = "Encuesta Completada";
+}
+
+<div class="container text-center" style="margin-top: 50px;">
+    <div class="alert alert-success" style="padding: 30px;">
+        <h1><span class="glyphicon glyphicon-ok-circle" style="font-size: 80px;"></span></h1>
+        <h2>¡Gracias por tu participación!</h2>
+        <p class="lead">Tu respuesta ha sido registrada exitosamente.</p>
+    </div>
+
+    <div class="panel panel-default" style="max-width: 600px; margin: 0 auto;">
+        <div class="panel-heading">
+            <h4>Detalles de tu Respuesta</h4>
+        </div>
+        <div class="panel-body">
+            <dl class="dl-horizontal text-left">
+                <dt>Encuesta:</dt>
+                <dd>@Model.Encuesta.Titulo</dd>
+
+                <dt>Participante:</dt>
+                <dd>@Model.Usuario</dd>
+
+                <dt>Fecha:</dt>
+                <dd>@Model.Fecha.ToString("dd/MM/yyyy HH:mm")</dd>
+
+                <dt>Tiempo:</dt>
+                <dd>@Model.TiempoSegundos segundos</dd>
+            </dl>
+        </div>
+    </div>
+
+    <div style="margin-top: 30px;">
+        <a href="@Url.Action("Index", "Encuesta")" class="btn btn-primary btn-lg">
+            <span class="glyphicon glyphicon-home"></span> Volver al Inicio
+        </a>
+    </div>
+
+    <div class="text-center">
+        <h2>¡Gracias por completar la encuesta!</h2>
+
+        <a href="@Url.Action("Index", "Encuesta")"
+           class="btn btn-primary btn-lg">
+            Volver a encuestas
+        </a>
+    </div>
+
+</div>

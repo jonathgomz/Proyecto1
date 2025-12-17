@@ -1,0 +1,63 @@
+﻿@model SistemaDeEncuestas.Models.Pregunta
+
+@{
+    ViewBag.Title = "Eliminar Pregunta";
+}
+
+<h2>Eliminar Pregunta</h2>
+
+<div class="alert alert-danger">
+    <h4><span class="glyphicon glyphicon-warning-sign"></span> ¿Está seguro de que desea eliminar esta pregunta?</h4>
+    <p>Esta acción no se puede deshacer y eliminará también todas sus opciones.</p>
+</div>
+
+<div class="panel panel-danger">
+    <div class="panel-heading">
+        <h3 class="panel-title">Información de la Pregunta</h3>
+    </div>
+    <div class="panel-body">
+        <dl class="dl-horizontal">
+            <dt>Encuesta:</dt>
+            <dd>@Model.Encuesta.Titulo</dd>
+
+            <dt>Orden:</dt>
+            <dd>@Model.Orden</dd>
+
+            <dt>Tipo:</dt>
+            <dd><span class="label label-info">@Model.TipoPregunta</span></dd>
+
+            <dt>Texto:</dt>
+            <dd>@Model.Texto</dd>
+
+            <dt>Opciones:</dt>
+            <dd>@Model.Opciones.Count</dd>
+        </dl>
+
+        @if (Model.Opciones.Any())
+        {
+            <hr />
+            <h5><strong>Opciones que serán eliminadas:</strong></h5>
+            <ul class="list-group">
+                @foreach (var opcion in Model.Opciones.OrderBy(o => o.Orden))
+                {
+                    <li class="list-group-item">@opcion.TextoOpcion</li>
+                }
+            </ul>
+        }
+    </div>
+</div>
+
+@using (Html.BeginForm("Delete", "Pregunta", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.Id)
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-danger">
+            <span class="glyphicon glyphicon-trash"></span> Sí, Eliminar
+        </button>
+        <a href="@Url.Action("Gestionar", "Pregunta", new { id = Model.EncuestaId })" class="btn btn-default">
+            <span class="glyphicon glyphicon-arrow-left"></span> Cancelar
+        </a>
+    </div>
+}

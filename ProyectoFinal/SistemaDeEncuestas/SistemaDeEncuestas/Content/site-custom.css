@@ -1,0 +1,154 @@
+﻿/* =========================
+   TÍTULOS
+========================= */
+h2 {
+    color: #667eea;
+    font-weight: 600;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 3px solid #667eea;
+}
+
+h4 {
+    color: #764ba2;
+    font-weight: 500;
+}
+
+/* =========================
+   PANELES
+========================= */
+.panel {
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    margin-bottom: 20px;
+    overflow: hidden;
+    transition: transform 0.2s ease;
+}
+
+    .panel:hover {
+        transform: translateY(-3px);
+    }
+
+.panel-heading {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #fff;
+    padding: 15px;
+    font-weight: 600;
+}
+
+.panel-body {
+    padding: 20px;
+}
+
+/* =========================
+   BOTONES
+========================= */
+.btn {
+    border-radius: 18px;
+    padding: 8px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    border: none;
+    transition: all 0.2s ease;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, #43e97b, #38f9d7);
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, #fa709a, #fee140);
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #f093fb, #f5576c);
+}
+
+.btn-info {
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+}
+
+.btn:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+/* =========================
+   TABLAS
+========================= */
+.table {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+    .table thead {
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: #fff;
+    }
+
+        .table thead th {
+            font-size: 13px;
+            font-weight: 600;
+            border: none;
+            padding: 12px;
+        }
+
+    .table tbody tr:hover {
+        background: #f8f9ff;
+    }
+
+/* =========================
+   FORMULARIOS
+========================= */
+.form-control {
+    border-radius: 8px;
+    border: 2px solid #e5e5e5;
+    padding: 8px 14px;
+    font-size: 14px;
+}
+
+    .form-control:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.15rem rgba(102, 126, 234, 0.25);
+    }
+
+.form-group label {
+    font-weight: 600;
+    font-size: 13px;
+    color: #667eea;
+}
+
+/* =========================
+   ALERTAS
+========================= */
+.alert {
+    border-radius: 10px;
+    border: none;
+    padding: 15px 18px;
+    font-size: 14px;
+}
+
+.alert-success {
+    background: #43e97b;
+    color: #fff;
+}
+
+.alert-danger {
+    background: #f5576c;
+    color: #fff;
+}
+
+.alert-warning {
+    background: #fee140;
+    color: #333;
+}
+
+.alert-info {
+    background: #4facfe;
+    color: #fff;
+}
